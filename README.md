@@ -18,6 +18,7 @@ developer to contribute to it, youll be suprised what youll learn.
 3. Reactive programming
 4. Repository pattern
 5. DI
+6. State management
 
 ## Features
 1. category of workouts.
@@ -33,7 +34,7 @@ development.
   interacts with views.
 - [Room DB](https://square.github.io/retrofit/) - Used to locally store our data.
 - [Dagger Hilt](https://dagger.dev/hilt/) - For dependency injection.
-- [Data Binding](https://dagger.dev/hilt/) - Used especially to bind data to the recyclerview.
 - [Material Design](https://dagger.dev/hilt/) - Core design principles used to design the application.
 - [Navigation Component](https://dagger.dev/hilt/) - Navigation system through the app.
 - [Android Studio](https://dagger.dev/hilt/) - Arctic fox 2020.3.1
+- etc
