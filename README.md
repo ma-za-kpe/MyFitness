@@ -1,5 +1,5 @@
 # MyFitness - Eductional App
-![Pombe Video](./docs/demo.mp4)
+https://user-images.githubusercontent.com/28810111/210182824-8752f36a-8b74-45d4-9ded-9b85eb47ddf4.mp4
 
 ### Status: 🚧 In progress 🚧
 A not so simple MVVM fitness app. Its completely offline, uses TypedArray to access and map the drawables to the data returned from the roomDB.
