@@ -24,8 +24,8 @@ class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     ): ViewModel() {
 
-    private val workOutId: Int = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutItemIdArg])
-    val workOutInfo: Flow<WorkOut> = getAllWorkOutByID(workOutId)
+//    private val workOutId: Int = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutItemIdArg])
+//    val workOutInfo: Flow<WorkOut> = getAllWorkOutByID(workOutId)
 
     private val _state = MutableStateFlow(HomeViewState())
     val state: StateFlow<HomeViewState> get() = _state
