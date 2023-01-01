@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="activity_work_list_top_rlt_size">180dp</dimen>
+    <dimen name="desc_img_size">250dp</dimen>
+</resources>

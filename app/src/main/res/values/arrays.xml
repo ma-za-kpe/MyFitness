@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="category_image">
+        <item>@drawable/ic_01_women</item>
+        <item>@drawable/ic_02_classic</item>
+        <item>@drawable/ic_03_sweat</item>
+        <item>@drawable/ic_04_butt</item>
+        <item>@drawable/ic_05_abs</item>
+        <item>@drawable/ic_06_beginner_pump</item>
+        <item>@drawable/ic_07_easy_aerobics</item>
+        <item>@drawable/ic_08_easy_aerobics</item>
+        <item>@drawable/ic_09_bikini_body</item>
+        <item>@drawable/ic_10_slow_burn</item>
+        <item>@drawable/ic_11_fat_blaster</item>
+        <item>@drawable/ic_12_booty_shaper</item>
+        <item>@drawable/ic_13_butt_blaster</item>
+        <item>@drawable/ic_14_core_trainer</item>
+        <item>@drawable/ic_15_abs_blaster</item>
+        <item>@drawable/ic_16_hiit_10</item>
+        <item>@drawable/ic_17_tabata_body</item>
+        <item>@drawable/ic_18_hiit_20</item>
+    </integer-array>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="rlt_top_bottom_padding">16dp</dimen>
+    <dimen name="rlt_top_btn_left_right_margin">8dp</dimen>
+    <dimen name="rlt_bottom_btn_left_right_margin">16dp</dimen>
+    <dimen name="rlt_top_btn_padding">4dp</dimen>
+
+
+    <dimen name="five_dp">5dp</dimen>
+
+<!--    <dimen name="text_size_16">@dimen/_14ssp</dimen>-->
+<!--    <dimen name="text_size_14">@dimen/_12ssp</dimen>-->
+<!--    <dimen name="text_size_12">@dimen/_10ssp</dimen>-->
+
+    <dimen name="rlt_height">180dp</dimen>
+    <dimen name="img_width">170dp</dimen>
+    <dimen name="view_line_width">30dp</dimen>
+    <dimen name="view_line_height">3dp</dimen>
+
+    <dimen name="viewpager_desc_img_width_height">180dp</dimen>
+    <dimen name="viewpager_img_width_height">250dp</dimen>
+
+    <dimen name="skip_pause_width">90dp</dimen>
+    <dimen name="skip_pause_height">35dp</dimen>
+
+    <dimen name="activity_work_list_top_rlt_size">150dp</dimen>
+    <dimen name="desc_img_size">220dp</dimen>
+    <integer name="slide_animation_duration">300</integer>
+    <integer name="viewfliper_animation">700</integer>
+</resources>

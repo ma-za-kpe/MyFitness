@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">My Fitness</string>
+
+    <string name="txtArmChestWorkOut">Arm &amp; Chest\nWorkout</string>
+    <string name="update">Update</string>
+    <string name="update_msg">An New Version of APP is Available</string>
+    <string name="critical_update_msg">An critical update is required</string>
+    <string name="btn_update">Update</string>
+    <string name="btn_cancel">Cancel</string>
+    <array name="category">
+        <item>Arm &amp; Chest\nWorkOut</item>
+        <item>Abs\nWorkout</item>
+        <item>Leg\nWorkout</item>
+        <item>Shoulder &amp; Back\nWorkout</item>
+    </array>
+
+    <string name="dl_exercise_quite_title">Don\'t quite! Feeling tired means it\'s working!</string>
+    <string name="btn_quit">Quit</string>
+    <string name="btn_continue">Continue</string>
+    <string name="AD_MOB_APPLICATION_ID">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="version_1_2">Version 2.3</string>
+
+    <string name="generic_error">Oops, an error has occurred …</string>
+    <string name="back">back …</string>
+    <string name="home">MyFitness</string>
+    <string name="empty_home"></string>
+    <string name="top_app_bar_action_icon_description">MyFitness</string>
+
+</resources>
