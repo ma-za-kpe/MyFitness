@@ -1,5 +1,5 @@
 # MyFitness - Eductional App
-![Pombe Video](./docs/demo.mp4)
+https://user-images.githubusercontent.com/28810111/210182824-8752f36a-8b74-45d4-9ded-9b85eb47ddf4.mp4
 
 ### Status: 🚧 In progress 🚧
 A not so simple MVVM fitness app. Its completely offline, uses TypedArray to access and map the drawables to the data returned from the roomDB.
@@ -18,6 +18,7 @@ developer to contribute to it, youll be suprised what youll learn.
 3. Reactive programming
 4. Repository pattern
 5. DI
+6. State management
 
 ## Features
 1. category of workouts.
@@ -33,7 +34,7 @@ development.
   interacts with views.
 - [Room DB](https://square.github.io/retrofit/) - Used to locally store our data.
 - [Dagger Hilt](https://dagger.dev/hilt/) - For dependency injection.
-- [Data Binding](https://dagger.dev/hilt/) - Used especially to bind data to the recyclerview.
 - [Material Design](https://dagger.dev/hilt/) - Core design principles used to design the application.
 - [Navigation Component](https://dagger.dev/hilt/) - Navigation system through the app.
 - [Android Studio](https://dagger.dev/hilt/) - Arctic fox 2020.3.1
+- etc
