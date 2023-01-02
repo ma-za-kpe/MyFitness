@@ -45,7 +45,7 @@ import com.maku.myfitness.ui.theme.MyFitnessTheme
 fun Home(
     innerPadding: PaddingValues,
     appState: MyFitnessAppState,
-    onClick: (Int) -> Unit,
+    onClick: (Int, Int) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
     ) {
     val state by homeViewModel.state.collectAsState()
@@ -54,7 +54,7 @@ fun Home(
 
 @Composable
 fun HomeRoute(innerPadding: PaddingValues, state: HomeViewState, appState: MyFitnessAppState,
-              onClick: (Int) -> Unit,) {
+              onClick: (Int, Int) -> Unit,) {
     when{
         state.loading -> {
             Box(modifier = Modifier.fillMaxWidth()) {
@@ -79,12 +79,11 @@ fun HomeRoute(innerPadding: PaddingValues, state: HomeViewState, appState: MyFit
                 }
                 itemsIndexed(state.workOuts) { index, item ->
                     CategoryItem(
-                        state.workOuts[index].Name,
+                        state.workOuts[index],
                         appState,
                         index,
-                        onClick = {
-                            onClick(state.workOuts[index].ID)
-                        })
+                        onClick
+                    )
                 }
             }
         }
@@ -103,10 +102,10 @@ fun HomeRoute(innerPadding: PaddingValues, state: HomeViewState, appState: MyFit
 
 @Composable
 fun CategoryItem(
-    name: String,
+    workout: WorkOut,
     appState: MyFitnessAppState,
     index: Int,
-    onClick: () -> Unit,
+    onClick: (Int, Int) -> Unit,
 ) {
     // TODO: find a better way to handle this
     val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
@@ -123,7 +122,7 @@ fun CategoryItem(
             painter = image,
             contentDescription = "",
             modifier = Modifier
-                .clickable { onClick() }
+                .clickable { onClick(workout.ID, index) }
                 .drawWithCache {
                     onDrawWithContent {
                         drawContent()
@@ -160,7 +159,7 @@ fun CategoryItem(
 //        )
 
         Text(
-            text = "$name\nWORKOUT",
+            text = "${workout.Name}\nWORKOUT",
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(10.dp),
@@ -177,7 +176,10 @@ fun CategoryItem(
 fun CategoryItemPreview() {
     val appState = rememberMyFitnessAppState()
     MyFitnessTheme {
-        CategoryItem("Mazakpe", appState, 0, {})
+        CategoryItem( WorkOut(
+            0, "", "", "",
+            "", "", ""
+        ), appState, 0) {_, _ ->}
     }
 }
 
@@ -227,7 +229,7 @@ fun HomeRoutePreview() {
                 )
             )),
             appState = appState,
-            {}
+            {_, _ -> {}}
         )
     }
 }

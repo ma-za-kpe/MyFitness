@@ -1,5 +1,6 @@
 package com.maku.myfitness.ui.screens.details
 
+import android.content.res.TypedArray
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,10 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,47 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.maku.myfitness.R
+import com.maku.myfitness.core.data.offline.model.WorkOut
 import com.maku.myfitness.ui.MyFitnessAppState
-import com.maku.myfitness.ui.screens.home.HomeViewModel
+import com.maku.myfitness.ui.rememberMyFitnessAppState
 import com.maku.myfitness.ui.theme.MyFitnessTheme
 
 @Composable
 fun WorkOutDetailsScreen(
     onBackClick: () -> Unit = {},
-    id: Int?,
+    id: Int?, // TODO: remove this, logic is already being handled in the viewmodel
     appState: MyFitnessAppState,
-    homeViewModel: HomeViewModel = hiltViewModel()
-    ) {
-//    val workOutInfo = homeViewModel.workOutInfo.collectAsState(
-//        initial = WorkOut(
-//            0, "", "", "",
-//            "", "", ""
-//        )
-//    )
-//    MenuItemScreen(onBackClick, workOutInfo,
-//    appState)
-    MenuItemScreen(onBackClick)
-}
-
-@Composable
-fun MenuItemScreen(
-    onBackClick: () -> Unit = {},
-//    workOutInfo: State<WorkOut>,
-//    appState: MyFitnessAppState,
-) {
-    MenuItemScaffold(
-        onBackClick = onBackClick,
-//        workOutInfo,
-//        appState
-    )
-}
-
-@Composable
-fun MenuItemScaffold(
-    onBackClick: () -> Unit = {},
-//    workOutInfo: State<WorkOut>,
-//    appState: MyFitnessAppState,
-    modifier: Modifier = Modifier,
+    imgIndex: Int?,
+    homeDetailsViewModel: HomeDetailsViewModel = hiltViewModel()
     ) {
     // TODO: find all repetition and optimize
     val systemUiController = rememberSystemUiController()
@@ -74,16 +49,47 @@ fun MenuItemScaffold(
             color = Color.Transparent, darkIcons = true
         )
     }
+    val workOutInfo: WorkOut by homeDetailsViewModel.workOutInfo.collectAsState(
+        initial = WorkOut(
+            0, "", "", "",
+            "", "", ""
+        )
+    )
+    MenuItemScreen(onBackClick, workOutInfo, appState, imgIndex)
+    // MenuItemScreen(onBackClick)
+}
 
-//    val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
-//    val img = categoryImage.getResourceId(index, -1)
-//    val image: Painter = painterResource(id = img)
+@Composable
+fun MenuItemScreen(
+    onBackClick: () -> Unit = {},
+    workOutInfo: WorkOut,
+    appState: MyFitnessAppState,
+    imgIndex: Int?,
+) {
+    MenuItemScaffold(
+        onBackClick = onBackClick,
+        workOutInfo = workOutInfo,
+        appState = appState,
+        imgIndex = imgIndex
+    )
+}
+
+@Composable
+fun MenuItemScaffold(
+    onBackClick: () -> Unit = {},
+    workOutInfo: WorkOut,
+    appState: MyFitnessAppState,
+    imgIndex: Int?,
+    ) {
+    // TODO: remove this warning
+    val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
+    val img = categoryImage.getResourceId(imgIndex!!, -1)
 
     LazyColumn(
-        modifier = modifier
+        modifier = Modifier
             .paint(
                 painterResource(
-                    id = R.drawable.ic_02_classic
+                    id = img
                 ),
                 alignment = Alignment.TopCenter,
                 contentScale = ContentScale.FillWidth
@@ -128,7 +134,17 @@ fun WorkOutItemToolbar(
 @Composable
 @Preview(showBackground = true)
 fun MenuItemScaffoldPreview() {
+    val appState = rememberMyFitnessAppState()
     MyFitnessTheme {
-        MenuItemScaffold()
+        MenuItemScaffold(
+            {},
+            WorkOut(
+                0, "", "", "",
+                "", "", ""
+            )
+            ,
+            appState,
+            1
+        )
     }
 }

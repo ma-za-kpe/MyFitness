@@ -1,4 +1,4 @@
-package com.maku.myfitness.ui.screens.home
+package com.maku.myfitness.ui.screens.details
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -18,25 +18,17 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getAllWorkOut: GetAllWorkOut
+class HomeDetailsViewModel @Inject constructor(
+    private val getAllWorkOutByID: GetAllWorkOutByID,
+    savedStateHandle: SavedStateHandle,
     ): ViewModel() {
-    private val _state = MutableStateFlow(HomeViewState())
-    val state: StateFlow<HomeViewState> get() = _state
 
-
+    private val workOutId: Int = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutItemIdArg])
+    private val workOutImageId: Int = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutImageIdArg])
+    val workOutInfo: Flow<WorkOut> = getAllWorkOutByID(workOutId)
     init {
-        _state.value = HomeViewState()
-         subscribeToWorkOutDb()
+        Log.d("TAG", "workOutId workOutId: ${workOutId}")
+        Log.d("TAG", "workOutId workOutImageId: ${workOutImageId}")
     }
 
-    private fun subscribeToWorkOutDb() {
-        _state.value = state.value.copy( loading = true)
-        viewModelScope.launch {
-            getAllWorkOut().collect { it ->
-                Log.d("TAG", "subscribeToWorkOutDb: size${it.distinctBy { it.Name }}")
-                _state.value = state.value.copy(loading = false, workOuts = it.distinctBy { it.Name })
-            }
-        }
-    }
 }
