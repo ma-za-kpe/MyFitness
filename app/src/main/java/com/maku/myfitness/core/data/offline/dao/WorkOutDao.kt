@@ -12,4 +12,7 @@ interface WorkOutDao {
 
     @Query("SELECT * FROM workout WHERE ID=:id ")
     fun loadSingleWorkOut(id: Int): Flow<WorkOut>
+
+    @Query("SELECT * FROM workout WHERE Name=:name ")
+    fun loadSingleWorkOutByName(name: String): Flow<WorkOut>
 }

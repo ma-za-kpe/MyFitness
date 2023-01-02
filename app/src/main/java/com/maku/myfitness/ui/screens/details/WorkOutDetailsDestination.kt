@@ -13,7 +13,7 @@ object WorkOutDetailsDestination : WorkOutNavigationDestination {
     const val workoutItemIdArg = "workoutItemId"
     const val workoutImageIdArg = "workoutImageId"
 }
-
+// TODO: for more advanced deep link navigation setup, refer to: https://www.droidcon.com/2021/12/16/safe-compose-arguments-an-improved-way-to-navigate-in-jetpack-compose-part-1/
 fun NavGraphBuilder.workOutDetailsGraph(
     onBackClick: () -> Unit,
     appState: MyFitnessAppState

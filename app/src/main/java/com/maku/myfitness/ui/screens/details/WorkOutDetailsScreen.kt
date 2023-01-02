@@ -2,14 +2,20 @@ package com.maku.myfitness.ui.screens.details
 
 import android.content.res.TypedArray
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Card
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.maku.myfitness.R
@@ -39,7 +47,7 @@ fun WorkOutDetailsScreen(
     appState: MyFitnessAppState,
     imgIndex: Int?,
     homeDetailsViewModel: HomeDetailsViewModel = hiltViewModel()
-    ) {
+) {
     // TODO: find all repetition and optimize
     val systemUiController = rememberSystemUiController()
     SideEffect {
@@ -80,53 +88,97 @@ fun MenuItemScaffold(
     workOutInfo: WorkOut,
     appState: MyFitnessAppState,
     imgIndex: Int?,
-    ) {
+) {
     // TODO: remove this warning
     val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
     val img = categoryImage.getResourceId(imgIndex!!, -1)
+    val image: Painter = painterResource(id = img)
 
-    LazyColumn(
+    ConstraintLayout(
         modifier = Modifier
-            .paint(
-                painterResource(
-                    id = img
-                ),
-                alignment = Alignment.TopCenter,
-                contentScale = ContentScale.FillWidth
-            )
-            .systemBarsPadding()
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxSize()
     ) {
-        item {
-            WorkOutItemToolbar(
-                onBackClick = onBackClick,
-            )
-        }
-    }
-}
+        val (img_drw, toolbar, column, btn) = createRefs()
+        Image(
+            painter = image,
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+            alignment = Alignment.TopCenter,
+            modifier = Modifier
+                .constrainAs(img_drw) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.matchParent
+                    height = Dimension.wrapContent
+                }
+        )
 
-@Composable
-fun WorkOutItemToolbar(
-    modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-    ) {
-        IconButton(
-            onClick = {
-                onBackClick()
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .constrainAs(toolbar) {
+                top.linkTo(img_drw.top)
+                end.linkTo(img_drw.end)
+                start.linkTo(img_drw.start)
+                width = Dimension.fillToConstraints
             }
+                .padding(32.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = stringResource(id = R.string.back)
-            )
+            IconButton(
+                onClick = {
+                    onBackClick()
+                }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back),
+                    contentDescription = stringResource(id = R.string.back)
+                )
+            }
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .constrainAs(column) {
+                    top.linkTo(img_drw.bottom, 8.dp)
+                    end.linkTo(img_drw.end)
+                    start.linkTo(img_drw.start)
+                    width = Dimension.fillToConstraints
+                },
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val list = (0..18).map { it.toString() }
+            items(count = list.size) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable{ }
+                        .padding(8.dp, 0.dp, 8.dp, 0.dp),
+                    elevation = 10.dp
+                ) {
+                    Row(
+                        modifier = Modifier.padding(10.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        val mm: Painter = painterResource(id = R.drawable.ic_launcher_web)
+                        Image(
+                            painter = mm,
+                            contentDescription = "",
+                            modifier = Modifier.size(70.dp)
+                        )
+                        Text(
+                            text = list[it],
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -141,8 +193,7 @@ fun MenuItemScaffoldPreview() {
             WorkOut(
                 0, "", "", "",
                 "", "", ""
-            )
-            ,
+            ),
             appState,
             1
         )
