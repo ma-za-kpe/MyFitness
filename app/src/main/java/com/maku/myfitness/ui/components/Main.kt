@@ -1,6 +1,8 @@
 package com.maku.myfitness.ui.components
 
+import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.maku.myfitness.MainActivity
 import com.maku.myfitness.ui.rememberMyFitnessAppState

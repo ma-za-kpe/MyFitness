@@ -1,5 +1,6 @@
 package com.maku.myfitness.core.navigation
 
+import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
@@ -14,7 +15,7 @@ const val homeNavigationRoute = "home_route"
 fun NavGraphBuilder.HomeGraph(
     startDestination: String,
     appState: MyFitnessAppState,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
 ) {
     navigation(
         route = homeNavigationRoute,
@@ -30,7 +31,7 @@ fun NavGraphBuilder.HomeGraph(
             nestedGraphs = {
                 workOutDetailsGraph(
                     onBackClick = { appState.popUp() },
-                    appState
+                    appState,
                 )
             },
         )

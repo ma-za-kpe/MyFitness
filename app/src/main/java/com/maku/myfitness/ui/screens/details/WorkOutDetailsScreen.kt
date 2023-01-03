@@ -2,6 +2,9 @@ package com.maku.myfitness.ui.screens.details
 
 import android.content.res.TypedArray
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
+import android.widget.ViewFlipper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,31 +19,37 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
+import com.maku.myfitness.core.util.allAssetsFiltered
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
-import com.maku.myfitness.ui.screens.home.HomeViewState
 import com.maku.myfitness.ui.theme.MyFitnessTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun WorkOutDetailsScreen(
@@ -83,7 +92,7 @@ fun MenuItemScreen(
         workOutInfo = workOutInfo,
         appState = appState,
         imgIndex = imgIndex,
-        workOutDetails = workOutDetails
+        workOutDetails = workOutDetails,
     )
 }
 
@@ -130,7 +139,7 @@ fun MenuItemScaffold(
                     start.linkTo(img_drw.start)
                     width = Dimension.fillToConstraints
                 }
-                .padding(24.dp)
+                .padding(16.dp, 32.dp, 16.dp, 0.dp)
         ) {
             IconButton(
                 onClick = {
@@ -145,10 +154,12 @@ fun MenuItemScaffold(
 
             Text(
                 "${workOutInfo.Name}\n${workOutDetails.workOuts.size} WORKOUTS",
-                maxLines = 1,
+                maxLines = 2,
                 fontSize = 24.sp
             )
         }
+
+        // val imageUrl = remember { mutableStateOf("") }
 
         LazyColumn(
             modifier = Modifier
@@ -169,17 +180,28 @@ fun MenuItemScaffold(
                         .padding(8.dp, 0.dp, 8.dp, 0.dp),
                     elevation = 10.dp
                 ) {
+
+//                    Log.d("TAG", "MenuItemScaffold: " +
+//                            "${allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
+//                                appState.assets).get(0)}")
                     Row(
                         modifier = Modifier.padding(10.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val mm: Painter = painterResource(id = R.drawable.ic_launcher_web)
-                        Image(
-                            painter = mm,
-                            contentDescription = "",
-                            modifier = Modifier.size(70.dp)
-                        )
+                        HorizontalPager(
+                            count = allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
+                                appState.assets).size,
+                            modifier = Modifier.size(100.dp),
+                            state = appState.pagerState,
+                        ) { page ->
+                            AsyncImage(
+                                model = allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
+                                    appState.assets)[page],
+                                contentDescription = "Translated description of what the image contains",
+                                modifier = Modifier.size(100.dp)
+                            )
+                        }
                         Text(
                             text = workOutDetails.workOuts[it].Excrcise_Name,
                             style = MaterialTheme.typography.bodyLarge,
@@ -187,6 +209,21 @@ fun MenuItemScaffold(
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
                         )
+                        // TODO: Add automatic scroll to next page animation in a recomposition safe way.
+//                        LaunchedEffect(key1 = appState.pagerState.currentPage) {
+//                            delay(500)
+//                            appState.pagerState.animateScrollToPage(
+//                                page = (appState.pagerState.currentPage + 1).mod(
+//                                    allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
+//                                        appState.assets).size
+//                                )
+//                            )
+////                            var newPosition =  appState.pagerState.currentPage + 1
+////                            if (newPosition > allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
+////                                    appState.assets).size - 1) newPosition = 0
+////                            // scrolling to the new position.
+////                            appState.pagerState.animateScrollToPage(newPosition)
+//                        }
                     }
                 }
             }
@@ -212,7 +249,7 @@ fun MenuItemScaffoldPreview() {
                     WorkOut(
                         1,
                         "Maku",
-                        "Pull Ups",
+                        "squats",
                         "huytfh",
                         "4",
                         "dont give up",
@@ -221,7 +258,7 @@ fun MenuItemScaffoldPreview() {
                     WorkOut(
                         1,
                         "Maku",
-                        "Pull Ups",
+                        "squats",
                         "huytfh",
                         "4",
                         "dont give up",
@@ -230,7 +267,7 @@ fun MenuItemScaffoldPreview() {
                     WorkOut(
                         1,
                         "Maku",
-                        "Pull Ups",
+                        "squats",
                         "huytfh",
                         "4",
                         "dont give up",
@@ -239,14 +276,14 @@ fun MenuItemScaffoldPreview() {
                     WorkOut(
                         1,
                         "Maku",
-                        "Pull Ups",
+                        "squats",
                         "huytfh",
                         "4",
                         "dont give up",
                         "jfhfhj"
                     )
                 )
-            )
+            ),
         )
     }
 }

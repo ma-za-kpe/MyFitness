@@ -1,9 +1,11 @@
 package com.maku.myfitness
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import com.maku.myfitness.ui.MyFitnessApp
@@ -19,7 +21,7 @@ class MainActivity : ComponentActivity() {
         //installSplashScreen()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            MainSection(this)
+            MainSection(this) // TODO: app this context in appState
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.maku.myfitness.ui
 
+import android.content.res.AssetManager
 import android.content.res.Resources
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -16,6 +17,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.maku.myfitness.core.navigation.TopLevelDestination
@@ -31,28 +34,34 @@ fun rememberMyFitnessAppState(
     navController: NavHostController = rememberNavController(),
     snackbarManager: SnackbarManager = SnackbarManager,
     resources: Resources = resources(),
+    assets: AssetManager = assets(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     systemUiController: SystemUiController = rememberSystemUiController(),
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    pagerState: PagerState = rememberPagerState()
 ): MyFitnessAppState {
     return remember(
         navController,
         snackbarManager,
         resources,
+        assets,
         coroutineScope,
         drawerState,
         systemUiController,
-        snackbarHostState
+        snackbarHostState,
+        pagerState
     ) {
         MyFitnessAppState(
             navController,
             snackbarManager,
             resources,
+            assets,
             coroutineScope,
             drawerState,
             systemUiController,
-            snackbarHostState
+            snackbarHostState,
+            pagerState
         )
     }
 }
@@ -64,15 +73,24 @@ fun resources(): Resources {
     return LocalContext.current.resources
 }
 
+@Composable
+@ReadOnlyComposable
+fun assets(): AssetManager {
+    LocalConfiguration.current
+    return LocalContext.current.assets
+}
+
 @Stable
 class MyFitnessAppState(
     val navController: NavHostController,
     val snackbarManager: SnackbarManager,
     val resources: Resources,
+    val assets: AssetManager,
     val coroutineScope: CoroutineScope,
     val drawerState: DrawerState,
     val systemUiController: SystemUiController,
     val snackbarHostState: SnackbarHostState,
+    val pagerState: PagerState,
 ) {
 
     init {

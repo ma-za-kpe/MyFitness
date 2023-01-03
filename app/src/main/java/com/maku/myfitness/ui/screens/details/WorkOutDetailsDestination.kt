@@ -1,5 +1,6 @@
 package com.maku.myfitness.ui.screens.details
 
+import android.view.View
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -18,7 +19,7 @@ object WorkOutDetailsDestination : WorkOutNavigationDestination {
 // TODO: for more advanced deep link navigation setup, refer to: https://www.droidcon.com/2021/12/16/safe-compose-arguments-an-improved-way-to-navigate-in-jetpack-compose-part-1/
 fun NavGraphBuilder.workOutDetailsGraph(
     onBackClick: () -> Unit,
-    appState: MyFitnessAppState
+    appState: MyFitnessAppState,
 ) {
     composable(
         route = "${WorkOutDetailsDestination.route}/{${WorkOutDetailsDestination.workoutItemIdArg}}/{${WorkOutDetailsDestination.workoutImageIdArg}}/{${WorkOutDetailsDestination.workoutImageNameArg}}",
