@@ -1,4 +1,4 @@
-# MyFitness - Eductional App
+# MyFitness 
 https://user-images.githubusercontent.com/28810111/210286790-48a914d3-37ae-44a6-b170-9bf8e4143585.mp4
 
 ### Status: 🚧 In progress 🚧
