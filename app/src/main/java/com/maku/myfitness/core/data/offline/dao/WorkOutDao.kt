@@ -14,5 +14,5 @@ interface WorkOutDao {
     fun loadSingleWorkOut(id: Int): Flow<WorkOut>
 
     @Query("SELECT * FROM workout WHERE Name=:name ")
-    fun loadSingleWorkOutByName(name: String): Flow<WorkOut>
+    fun loadSingleWorkOutByName(name: String): Flow<List<WorkOut>>
 }

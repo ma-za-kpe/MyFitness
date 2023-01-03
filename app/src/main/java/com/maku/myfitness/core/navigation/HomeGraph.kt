@@ -24,8 +24,8 @@ fun NavGraphBuilder.HomeGraph(
             startDestination = categoryNavigationRoute,
             appState,
             innerPadding,
-            onClick = { workoutId, imgId ->
-                appState.navigate("${WorkOutDetailsDestination.route}/$workoutId/$imgId")
+            onClick = { workoutId, imgId, name ->
+                appState.navigate("${WorkOutDetailsDestination.route}/$workoutId/$imgId/$name")
             },
             nestedGraphs = {
                 workOutDetailsGraph(

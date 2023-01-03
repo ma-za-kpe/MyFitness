@@ -15,4 +15,8 @@ class WorkOutCacheImpl @Inject constructor(
     override fun getSingleWorkOut(id: Int): Flow<WorkOut> {
        return workOutDao.loadSingleWorkOut(id)
     }
+
+    override fun loadSingleWorkOutByName(name: String): Flow<List<WorkOut>> {
+        return workOutDao.loadSingleWorkOutByName(name)
+    }
 }

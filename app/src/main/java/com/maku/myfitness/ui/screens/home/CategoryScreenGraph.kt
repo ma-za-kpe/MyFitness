@@ -13,7 +13,7 @@ fun NavGraphBuilder.CategoryScreenGraph(
     startDestination: String,
     appState: MyFitnessAppState,
     innerPadding: PaddingValues,
-    onClick: (Int, Int) -> Unit,
+    onClick: (Int, Int, String) -> Unit,
     nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(

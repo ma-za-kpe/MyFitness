@@ -45,17 +45,19 @@ import com.maku.myfitness.ui.theme.MyFitnessTheme
 fun Home(
     innerPadding: PaddingValues,
     appState: MyFitnessAppState,
-    onClick: (Int, Int) -> Unit,
+    onClick: (Int, Int, String) -> Unit,
     homeViewModel: HomeViewModel = hiltViewModel(),
-    ) {
+) {
     val state by homeViewModel.state.collectAsState()
     HomeRoute(innerPadding, state, appState, onClick)
 }
 
 @Composable
-fun HomeRoute(innerPadding: PaddingValues, state: HomeViewState, appState: MyFitnessAppState,
-              onClick: (Int, Int) -> Unit,) {
-    when{
+fun HomeRoute(
+    innerPadding: PaddingValues, state: HomeViewState, appState: MyFitnessAppState,
+    onClick: (Int, Int, String) -> Unit,
+) {
+    when {
         state.loading -> {
             Box(modifier = Modifier.fillMaxWidth()) {
                 CircularProgressIndicator(
@@ -105,24 +107,26 @@ fun CategoryItem(
     workout: WorkOut,
     appState: MyFitnessAppState,
     index: Int,
-    onClick: (Int, Int) -> Unit,
+    onClick: (Int, Int, String) -> Unit,
 ) {
     // TODO: find a better way to handle this
     val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
-    Box(modifier = Modifier
-        .clip(RoundedCornerShape(16.dp))
-        .fillMaxWidth()
-        .height(200.dp)
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(16.dp))
+            .fillMaxWidth()
+            .height(200.dp)
     ) {
         val img = categoryImage.getResourceId(index, -1)
-        val image: Painter = painterResource(id = img) // TODO: this crushes the app at the 8 or 9th image scroll with error 2022-12-30 23:14:27.860 18249-18249 Error: stack=java.lang.IllegalArgumentException: Only VectorDrawables and rasterized asset types are supported ex. PNG, JPG
+        val image: Painter =
+            painterResource(id = img) // TODO: this crushes the app at the 8 or 9th image scroll with error 2022-12-30 23:14:27.860 18249-18249 Error: stack=java.lang.IllegalArgumentException: Only VectorDrawables and rasterized asset types are supported ex. PNG, JPG
         val error: Painter = painterResource(id = R.drawable.image_not_found)
 
         Image(
             painter = image,
             contentDescription = "",
             modifier = Modifier
-                .clickable { onClick(workout.ID, index) }
+                .clickable { onClick(workout.ID, index, workout.Name) }
                 .drawWithCache {
                     onDrawWithContent {
                         drawContent()
@@ -176,10 +180,12 @@ fun CategoryItem(
 fun CategoryItemPreview() {
     val appState = rememberMyFitnessAppState()
     MyFitnessTheme {
-        CategoryItem( WorkOut(
-            0, "", "", "",
-            "", "", ""
-        ), appState, 0) {_, _ ->}
+        CategoryItem(
+            WorkOut(
+                0, "", "", "",
+                "", "", ""
+            ), appState, 0
+        ) { _, _, _ -> }
     }
 }
 
@@ -190,46 +196,48 @@ fun HomeRoutePreview() {
         val appState = rememberMyFitnessAppState()
         HomeRoute(
             innerPadding = PaddingValues(10.dp),
-            state = HomeViewState(false, listOf(
-                WorkOut(
-                    1,
-                    "Maku",
-                    "Pull Ups",
-                "huytfh",
-                    "4",
-                    "dont give up",
-                    "jfhfhj"
-                ),
-                WorkOut(
-                    1,
-                    "Maku",
-                    "Pull Ups",
-                    "huytfh",
-                    "4",
-                    "dont give up",
-                    "jfhfhj"
-                ),
-                WorkOut(
-                    1,
-                    "Maku",
-                    "Pull Ups",
-                    "huytfh",
-                    "4",
-                    "dont give up",
-                    "jfhfhj"
-                ),
-                WorkOut(
-                    1,
-                    "Maku",
-                    "Pull Ups",
-                    "huytfh",
-                    "4",
-                    "dont give up",
-                    "jfhfhj"
+            state = HomeViewState(
+                false, listOf(
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    ),
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    ),
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    ),
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    )
                 )
-            )),
+            ),
             appState = appState,
-            {_, _ -> {}}
+            { _, _, _ -> {} }
         )
     }
 }

@@ -1,16 +1,15 @@
 package com.maku.myfitness.ui.screens.details
 
 import android.content.res.TypedArray
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.material3.IconButton
@@ -22,14 +21,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,6 +39,7 @@ import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
+import com.maku.myfitness.ui.screens.home.HomeViewState
 import com.maku.myfitness.ui.theme.MyFitnessTheme
 
 @Composable
@@ -63,7 +65,8 @@ fun WorkOutDetailsScreen(
             "", "", ""
         )
     )
-    MenuItemScreen(onBackClick, workOutInfo, appState, imgIndex)
+    val workOutDetails by homeDetailsViewModel.state.collectAsState()
+    MenuItemScreen(onBackClick, workOutInfo, appState, imgIndex, workOutDetails)
     // MenuItemScreen(onBackClick)
 }
 
@@ -73,12 +76,14 @@ fun MenuItemScreen(
     workOutInfo: WorkOut,
     appState: MyFitnessAppState,
     imgIndex: Int?,
+    workOutDetails: WorkOutDetailsViewState,
 ) {
     MenuItemScaffold(
         onBackClick = onBackClick,
         workOutInfo = workOutInfo,
         appState = appState,
-        imgIndex = imgIndex
+        imgIndex = imgIndex,
+        workOutDetails = workOutDetails
     )
 }
 
@@ -88,6 +93,7 @@ fun MenuItemScaffold(
     workOutInfo: WorkOut,
     appState: MyFitnessAppState,
     imgIndex: Int?,
+    workOutDetails: WorkOutDetailsViewState,
 ) {
     // TODO: remove this warning
     val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
@@ -98,8 +104,8 @@ fun MenuItemScaffold(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        val (img_drw, toolbar, column, btn) = createRefs()
-        Image(
+        val (img_drw, toolbar, column, btn, numberOf) = createRefs()
+        Image( // TODO: reduce image height to match original app asthetic
             painter = image,
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
@@ -115,16 +121,16 @@ fun MenuItemScaffold(
         )
 
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .constrainAs(toolbar) {
-                top.linkTo(img_drw.top)
-                end.linkTo(img_drw.end)
-                start.linkTo(img_drw.start)
-                width = Dimension.fillToConstraints
-            }
-                .padding(32.dp)
+                    top.linkTo(img_drw.top)
+                    end.linkTo(img_drw.end)
+                    start.linkTo(img_drw.start)
+                    width = Dimension.fillToConstraints
+                }
+                .padding(24.dp)
         ) {
             IconButton(
                 onClick = {
@@ -136,6 +142,12 @@ fun MenuItemScaffold(
                     contentDescription = stringResource(id = R.string.back)
                 )
             }
+
+            Text(
+                "${workOutInfo.Name}\n${workOutDetails.workOuts.size} WORKOUTS",
+                maxLines = 1,
+                fontSize = 24.sp
+            )
         }
 
         LazyColumn(
@@ -149,12 +161,11 @@ fun MenuItemScaffold(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val list = (0..18).map { it.toString() }
-            items(count = list.size) {
+            items(count = workOutDetails.workOuts.size) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable{ }
+                        .clickable { }
                         .padding(8.dp, 0.dp, 8.dp, 0.dp),
                     elevation = 10.dp
                 ) {
@@ -170,7 +181,7 @@ fun MenuItemScaffold(
                             modifier = Modifier.size(70.dp)
                         )
                         Text(
-                            text = list[it],
+                            text = workOutDetails.workOuts[it].Excrcise_Name,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -195,7 +206,47 @@ fun MenuItemScaffoldPreview() {
                 "", "", ""
             ),
             appState,
-            1
+            1,
+            WorkOutDetailsViewState(
+                false, listOf(
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    ),
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    ),
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    ),
+                    WorkOut(
+                        1,
+                        "Maku",
+                        "Pull Ups",
+                        "huytfh",
+                        "4",
+                        "dont give up",
+                        "jfhfhj"
+                    )
+                )
+            )
         )
     }
 }

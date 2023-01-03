@@ -38,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.maku.myfitness.BuildConfig
 import com.maku.myfitness.MainActivity
 import com.maku.myfitness.R
@@ -68,7 +69,7 @@ fun MyFitnessDrawer(appState: MyFitnessAppState, context: MainActivity) {
     )
 
     val selectedItem = remember { mutableStateOf(map["0Home"]) }
-     val appPackageName: String = BuildConfig.APPLICATION_ID
+    val appPackageName: String = BuildConfig.APPLICATION_ID
 
     ModalNavigationDrawer(
         drawerState = appState.drawerState,
@@ -84,13 +85,14 @@ fun MyFitnessDrawer(appState: MyFitnessAppState, context: MainActivity) {
                             Icon(
                                 item.value,
                                 contentDescription = null
-                            )},
+                            )
+                        },
                         label = { Text(item.key.drop(1)) },
                         selected = item.value == selectedItem.value,
                         onClick = {
                             appState.coroutineScope.launch { appState.drawerState.close() }
                             selectedItem.value = item.value
-                            when(item.key){
+                            when (item.key) {
                                 "0Home" -> {
                                     appState.navigate(homeNavigationRoute)
                                 }
@@ -137,7 +139,13 @@ fun DrawerHeader() {
         Text(
             buildAnnotatedString {
                 append("My - ")
-                withStyle(style = SpanStyle(fontWeight = FontWeight.W900, color = Color(0xFF4552B8))) {
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.W900,
+                        color = Color(0xFF4552B8)
+                    )
+                ) {
                     append("Fitness")
                 }
             }
@@ -152,8 +160,9 @@ fun DrawerFooter() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         val image: Painter = painterResource(id = R.drawable.ic_launcher_web)
-        Image(painter = image,contentDescription = "",
-      )
+        Image(
+            painter = image, contentDescription = "",
+        )
         // Text("MyFitness!")
     }
 }
@@ -165,7 +174,12 @@ fun shareAppLink(context: MainActivity, appPackageName: String) {
     shareIntent.putExtra(Intent.EXTRA_TEXT, link)
     shareIntent.putExtra(Intent.EXTRA_SUBJECT, context.resources.getString(R.string.app_name))
     shareIntent.type = "text/plain"
-    context.startActivity(Intent.createChooser(shareIntent, context.resources.getString(R.string.app_name)))
+    context.startActivity(
+        Intent.createChooser(
+            shareIntent,
+            context.resources.getString(R.string.app_name)
+        )
+    )
 }
 
 @SuppressLint("QueryPermissionsNeeded")
