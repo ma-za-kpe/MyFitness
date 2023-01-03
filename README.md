@@ -1,11 +1,11 @@
-# MyFitness - Eductional App
-https://user-images.githubusercontent.com/28810111/210182824-8752f36a-8b74-45d4-9ded-9b85eb47ddf4.mp4
+# MyFitness 
+https://user-images.githubusercontent.com/28810111/210286790-48a914d3-37ae-44a6-b170-9bf8e4143585.mp4
 
 ### Status: 🚧 In progress 🚧
 A not so simple MVVM fitness app. Its completely offline, uses TypedArray to access and map the drawables to the data returned from the roomDB.
 Experimenting with an offline first app.
 
-This is a recreation of this app i bought on [code canyon](https://codecanyon.net/item/women-fitness-challenge-android-native-app/30024357#). 
+This is a recreation of this app i bought on [code canyon](https://codecanyon.net/item/women-fitness-challenge-android-native-app/30024357#), years ago. 
 Its created using java, what ive done is to recreate it using koltin and a few jetpack compose libraries.
 
 ### WHY?
