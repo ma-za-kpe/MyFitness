@@ -1,6 +1,5 @@
 package com.maku.myfitness.core.navigation
 
-import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -17,7 +16,11 @@ fun MyFitnessNavHost(
         navController = appState.navController,
         startDestination = startDestination,
     ) {
-        HomeGraph(startDestination = homeGraphNavigationDestination, appState = appState, innerPadding)
+        HomeGraph(
+            startDestination = homeGraphNavigationDestination,
+            appState = appState,
+            innerPadding = innerPadding
+        )
     }
 }
 

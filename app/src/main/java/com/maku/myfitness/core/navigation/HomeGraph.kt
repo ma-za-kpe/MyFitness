@@ -1,6 +1,5 @@
 package com.maku.myfitness.core.navigation
 
-import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation

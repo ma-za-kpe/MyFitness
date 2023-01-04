@@ -1,7 +1,5 @@
 package com.maku.myfitness.ui
 
-import android.util.Log
-import android.view.View
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
@@ -14,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.maku.myfitness.core.navigation.MyFitnessNavHost
@@ -27,7 +24,6 @@ fun MyFitnessApp(appState: MyFitnessAppState) {
     MyFitnessTheme {
         Surface(color = MaterialTheme.colorScheme.background) {
             val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-            Log.d("TAG", "MyFitnessApp path: ${appState.currentDestination }")
             Scaffold(
                 topBar = {
                     // Show the top app bar on top level destinations.
@@ -43,7 +39,7 @@ fun MyFitnessApp(appState: MyFitnessAppState) {
                             },
                             navigationIcon = {
                                 IconButton(onClick = {
-                                    if (appState.drawerState.isClosed){
+                                    if (appState.drawerState.isClosed) {
                                         appState.coroutineScope.launch {
                                             appState.drawerState.open()
                                         }

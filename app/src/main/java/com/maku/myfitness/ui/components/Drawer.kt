@@ -1,10 +1,8 @@
 package com.maku.myfitness.ui.components
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.view.View
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -42,18 +40,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maku.myfitness.BuildConfig
-import com.maku.myfitness.MainActivity
 import com.maku.myfitness.R
+import com.maku.myfitness.core.navigation.homeNavigationRoute
 import com.maku.myfitness.ui.MyFitnessApp
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
-import com.maku.myfitness.core.navigation.homeNavigationRoute
 import com.maku.myfitness.ui.theme.MyFitnessTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun MyFitnessDrawer(appState: MyFitnessAppState, context: MainActivity) {
-// icons to mimic drawer destinations
+fun MyFitnessDrawer(appState: MyFitnessAppState) {
+    // Fetching the Local Context
+    val mContext = LocalContext.current
+
+    // icons to mimic drawer destinations
     val items = listOf(
         Icons.Default.Home,
         Icons.Default.Email,
@@ -94,21 +94,75 @@ fun MyFitnessDrawer(appState: MyFitnessAppState, context: MainActivity) {
                         onClick = {
                             appState.coroutineScope.launch { appState.drawerState.close() }
                             selectedItem.value = item.value
+                            // TODO: add alert dialogs where necessary
                             when (item.key) {
+                                "1Contact Us" -> {
+                                    try {
+                                        val sendIntentGmail = Intent(Intent.ACTION_SEND)
+                                        sendIntentGmail.type = "plain/text"
+                                        sendIntentGmail.setPackage("com.google.android.gm")
+                                        sendIntentGmail.putExtra(
+                                            Intent.EXTRA_EMAIL,
+                                            arrayOf("makpalyy@gmail.com")
+                                        )
+                                        sendIntentGmail.putExtra(
+                                            Intent.EXTRA_SUBJECT,
+                                            mContext.resources.getString(R.string.app_name) + " - Android"
+                                        )
+                                        mContext.startActivity(sendIntentGmail)
+                                    } catch (e: ActivityNotFoundException) {
+                                        e.printStackTrace()
+                                        Toast.makeText(
+                                            mContext,
+                                            "Gmail app not found on this device",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
                                 "0Home" -> {
                                     appState.navigate(homeNavigationRoute)
                                 }
-                                "1Contact Us" -> {
-                                    contactUs(context)
-                                }
                                 "2Share" -> {
-                                    shareAppLink(context, appPackageName)
+                                    val shareIntent = Intent()
+                                    shareIntent.action = Intent.ACTION_SEND
+                                    val link =
+                                        "https://play.google.com/store/apps/details?id=$appPackageName"
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, link)
+                                    shareIntent.putExtra(
+                                        Intent.EXTRA_SUBJECT,
+                                        mContext.resources.getString(R.string.app_name)
+                                    )
+                                    shareIntent.type = "text/plain"
+                                    mContext.startActivity(
+                                        Intent.createChooser(
+                                            shareIntent,
+                                            mContext.resources.getString(R.string.app_name)
+                                        )
+                                    )
                                 }
                                 "3Rate Us" -> {
-                                    rateUs(context, appPackageName)
+                                    // TODO: REPLACE THIS WITH IN APP RATING...
+                                    val link =
+                                        "https://play.google.com/store/apps/details?id=$appPackageName"
+
+                                    try {
+                                        mContext.startActivity(
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                Uri.parse(link)
+                                            )
+                                        )
+                                    } catch (anfe: ActivityNotFoundException) {
+                                        mContext.startActivity(
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                Uri.parse(link)
+                                            )
+                                        )
+                                    }
                                 }
                                 "4Exit App" -> {
-
+                                    // TODO: add functionality to exit app
                                 }
                             }
                         },
@@ -121,7 +175,8 @@ fun MyFitnessDrawer(appState: MyFitnessAppState, context: MainActivity) {
         },
         content = {
             MyFitnessApp(appState)
-        }
+        },
+        scrimColor = Color.Transparent
     )
 }
 
@@ -140,7 +195,14 @@ fun DrawerHeader() {
         )
         Text(
             buildAnnotatedString {
-                append("My - ")
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.W900,
+                    )
+                ) {
+                    append("My - ")
+                }
                 withStyle(
                     style = SpanStyle(
                         fontSize = 32.sp,
@@ -155,69 +217,11 @@ fun DrawerHeader() {
     }
 }
 
-@Composable
-fun DrawerFooter() {
-    Row(
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        val image: Painter = painterResource(id = R.drawable.ic_launcher_web)
-        Image(
-            painter = image, contentDescription = "",
-        )
-        // Text("MyFitness!")
-    }
-}
-
-fun shareAppLink(context: MainActivity, appPackageName: String) {
-    val shareIntent = Intent()
-    shareIntent.action = Intent.ACTION_SEND
-    val link = "https://play.google.com/store/apps/details?id=$appPackageName"
-    shareIntent.putExtra(Intent.EXTRA_TEXT, link)
-    shareIntent.putExtra(Intent.EXTRA_SUBJECT, context.resources.getString(R.string.app_name))
-    shareIntent.type = "text/plain"
-    context.startActivity(
-        Intent.createChooser(
-            shareIntent,
-            context.resources.getString(R.string.app_name)
-        )
-    )
-}
-
-@SuppressLint("QueryPermissionsNeeded")
-fun contactUs(context: MainActivity) {
-    try {
-        val sendIntentGmail = Intent(Intent.ACTION_SEND)
-        sendIntentGmail.type = "plain/text"
-        sendIntentGmail.setPackage("com.google.android.gm")
-        sendIntentGmail.putExtra(Intent.EXTRA_EMAIL, arrayOf("makpalyy@gmail.com"))
-        sendIntentGmail.putExtra(
-            Intent.EXTRA_SUBJECT,
-            context.resources.getString(R.string.app_name) + " - Android"
-        )
-        context.startActivity(sendIntentGmail)
-    } catch (e: ActivityNotFoundException) {
-        e.printStackTrace()
-        Toast.makeText(context, "Gmail app not found on this device", Toast.LENGTH_LONG).show()
-    }
-}
-
-//// TODO: REPLACE THIS WITH IN APP RATING...
-fun rateUs(context: MainActivity, appPackageName: String) {
-    val link = "https://play.google.com/store/apps/details?id=$appPackageName"
-
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-    } catch (anfe: ActivityNotFoundException) {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun MyFitnessDrawerPreview() {
     val appState = rememberMyFitnessAppState()
     MyFitnessTheme {
-        MyFitnessDrawer(appState, context = MainActivity())
+        MyFitnessDrawer(appState)
     }
 }

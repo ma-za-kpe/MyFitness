@@ -120,8 +120,6 @@ fun CategoryItem(
         val img = categoryImage.getResourceId(index, -1)
         val image: Painter =
             painterResource(id = img) // TODO: this crushes the app at the 8 or 9th image scroll with error 2022-12-30 23:14:27.860 18249-18249 Error: stack=java.lang.IllegalArgumentException: Only VectorDrawables and rasterized asset types are supported ex. PNG, JPG
-        val error: Painter = painterResource(id = R.drawable.image_not_found)
-
         Image(
             painter = image,
             contentDescription = "",
@@ -236,8 +234,7 @@ fun HomeRoutePreview() {
                     )
                 )
             ),
-            appState = appState,
-            { _, _, _ -> {} }
-        )
+            appState = appState
+        ) { _, _, _ -> {} }
     }
 }
