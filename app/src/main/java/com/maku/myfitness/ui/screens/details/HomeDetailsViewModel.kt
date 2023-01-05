@@ -38,9 +38,6 @@ class HomeDetailsViewModel @Inject constructor(
     init {
         _state.value = WorkOutDetailsViewState()
         subscribeToWorkOutDetails()
-        Log.d("TAG", "workOutId workOutId: ${workOutId}")
-        Log.d("TAG", "workOutId workOutImageId: ${workOutImageId}")
-        Log.d("TAG", "workOutId workOutNameId: ${workOutNameId}")
     }
 
     private fun subscribeToWorkOutDetails() {

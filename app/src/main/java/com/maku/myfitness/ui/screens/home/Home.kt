@@ -140,26 +140,6 @@ fun CategoryItem(
             contentScale = ContentScale.FillBounds
         )
 
-//        AsyncImage(
-//            model = image,
-//            contentDescription = null,
-//            modifier = Modifier
-//                .drawWithCache {
-//                    onDrawWithContent {
-//                        drawContent()
-//                        drawRect(
-//                            Brush.verticalGradient(
-//                                0.5f to Color.Black.copy(alpha = 0F),
-//                                2F to Color.Black
-//                            )
-//                        )
-//                    }
-//                }
-//                .fillMaxSize(),
-//            contentScale = ContentScale.FillBounds,
-//            error = painterResource(R.drawable.image_not_found)
-//        )
-
         Text(
             text = "${workout.Name}\nWORKOUT",
             modifier = Modifier

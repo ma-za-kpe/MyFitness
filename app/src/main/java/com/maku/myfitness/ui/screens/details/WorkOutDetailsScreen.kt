@@ -54,12 +54,11 @@ import kotlinx.coroutines.delay
 @Composable
 fun WorkOutDetailsScreen(
     onBackClick: () -> Unit = {},
-    id: Int?, // TODO: remove this, logic is already being handled in the viewmodel
+    id: Int?, // TODO: remove this, logic is already being handled in the view model
     appState: MyFitnessAppState,
     imgIndex: Int?,
     homeDetailsViewModel: HomeDetailsViewModel = hiltViewModel()
 ) {
-    // TODO: find all repetition and optimize
     val systemUiController = rememberSystemUiController()
     SideEffect {
         // set transparent color so that our image is visible
@@ -181,27 +180,17 @@ fun MenuItemScaffold(
                     elevation = 10.dp
                 ) {
 
-//                    Log.d("TAG", "MenuItemScaffold: " +
-//                            "${allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
-//                                appState.assets).get(0)}")
                     Row(
                         modifier = Modifier.padding(10.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        HorizontalPager(
-                            count = allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
-                                appState.assets).size,
-                            modifier = Modifier.size(100.dp),
-                            state = appState.pagerState,
-                        ) { page ->
-                            AsyncImage(
-                                model = allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
-                                    appState.assets)[page],
-                                contentDescription = "Translated description of what the image contains",
-                                modifier = Modifier.size(100.dp)
-                            )
-                        }
+                        AsyncImage(
+                            model = allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
+                                appState.assets)[0],
+                            contentDescription = "Translated description of what the image contains",
+                            modifier = Modifier.size(100.dp)
+                        )
                         Text(
                             text = workOutDetails.workOuts[it].Excrcise_Name,
                             style = MaterialTheme.typography.bodyLarge,
@@ -209,21 +198,6 @@ fun MenuItemScaffold(
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
                         )
-                        // TODO: Add automatic scroll to next page animation in a recomposition safe way.
-//                        LaunchedEffect(key1 = appState.pagerState.currentPage) {
-//                            delay(500)
-//                            appState.pagerState.animateScrollToPage(
-//                                page = (appState.pagerState.currentPage + 1).mod(
-//                                    allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
-//                                        appState.assets).size
-//                                )
-//                            )
-////                            var newPosition =  appState.pagerState.currentPage + 1
-////                            if (newPosition > allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
-////                                    appState.assets).size - 1) newPosition = 0
-////                            // scrolling to the new position.
-////                            appState.pagerState.animateScrollToPage(newPosition)
-//                        }
                     }
                 }
             }
