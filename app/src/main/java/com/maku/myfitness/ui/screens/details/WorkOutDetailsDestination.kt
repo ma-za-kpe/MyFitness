@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.maku.myfitness.core.navigation.WorkOutNavigationDestination
 import com.maku.myfitness.ui.MyFitnessAppState
+import com.maku.myfitness.ui.screens.details.pager.WorkOutDetailsDescriptionDestination
 
 object WorkOutDetailsDestination : WorkOutNavigationDestination {
     override val route = "workout_item_route"
@@ -37,9 +38,13 @@ fun NavGraphBuilder.workOutDetailsGraph(
     ) {
         WorkOutDetailsScreen( // TODO: we dont need to pass some of these here, especially if we arent using them in the composable function
             onBackClick = onBackClick,
-            it.arguments?.getInt(WorkOutDetailsDestination.workoutItemIdArg),
             appState,
             it.arguments?.getInt(WorkOutDetailsDestination.workoutImageIdArg),
+            onClick = { workoutId, categoryId ->
+                appState.navigate(
+                    "${WorkOutDetailsDescriptionDestination.route}/$workoutId/$categoryId"
+                )
+            }
         )
     }
 }

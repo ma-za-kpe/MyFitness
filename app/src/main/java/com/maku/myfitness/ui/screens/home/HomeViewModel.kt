@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor(
     private val getAllWorkOut: GetAllWorkOut
     ): ViewModel() {
-    private val _state = MutableStateFlow(HomeViewState())
+    private val _state = MutableStateFlow(HomeViewState())     // TODO: you should probably use a different state here ... or just consolidate all states like its done in the now in android app. (highly suggest)
     val state: StateFlow<HomeViewState> get() = _state
 
 

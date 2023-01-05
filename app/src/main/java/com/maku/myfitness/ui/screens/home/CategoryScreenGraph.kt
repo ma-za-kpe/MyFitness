@@ -14,7 +14,6 @@ fun NavGraphBuilder.CategoryScreenGraph(
     appState: MyFitnessAppState,
     innerPadding: PaddingValues,
     onClick: (Int, Int, String) -> Unit,
-    nestedGraphs: NavGraphBuilder.() -> Unit,
 ) {
     navigation(
         route = homeGraphNavigationDestination,
@@ -23,6 +22,5 @@ fun NavGraphBuilder.CategoryScreenGraph(
         composable(route = startDestination) {
             Home(innerPadding, appState, onClick)
         }
-        nestedGraphs()
     }
 }

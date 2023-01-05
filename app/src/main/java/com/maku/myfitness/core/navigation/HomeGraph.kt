@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.navigation
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.screens.details.WorkOutDetailsDestination
+import com.maku.myfitness.ui.screens.details.pager.workOutDescriptionsDetailsGraph
 import com.maku.myfitness.ui.screens.details.workOutDetailsGraph
 import com.maku.myfitness.ui.screens.home.CategoryScreenGraph
 import com.maku.myfitness.ui.screens.home.categoryNavigationRoute
@@ -26,13 +27,16 @@ fun NavGraphBuilder.HomeGraph(
             innerPadding,
             onClick = { workoutId, imgId, name ->
                 appState.navigate("${WorkOutDetailsDestination.route}/$workoutId/$imgId/$name")
-            },
-            nestedGraphs = {
-                workOutDetailsGraph(
-                    onBackClick = { appState.popUp() },
-                    appState,
-                )
-            },
+            }
+        )
+        workOutDetailsGraph(
+            onBackClick = { appState.popUp() },
+            appState,
+        )
+
+        workOutDescriptionsDetailsGraph(
+            onBackClick = { appState.popUp() },
+            appState,
         )
     }
 }

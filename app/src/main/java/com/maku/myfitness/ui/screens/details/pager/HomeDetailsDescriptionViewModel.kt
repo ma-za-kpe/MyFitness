@@ -1,4 +1,4 @@
-package com.maku.myfitness.ui.screens.details
+package com.maku.myfitness.ui.screens.details.pager
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -21,31 +21,30 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeDetailsViewModel @Inject constructor(
+class HomeDetailsDescriptionViewModel @Inject constructor(
     private val getAllWorkOutByID: GetAllWorkOutByID,
     private val getAllWorkOutByName: GetAllWorkOutByName,
     savedStateHandle: SavedStateHandle,
-    ): ViewModel() {
+) : ViewModel() {
 
-    private val workOutId: Int = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutItemIdArg])
-    private val workOutImageId: Int = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutImageIdArg])
-    val workOutNameId: String = checkNotNull(savedStateHandle[WorkOutDetailsDestination.workoutImageNameArg])
+    private val workOutName: String =
+        checkNotNull(savedStateHandle[WorkOutDetailsDescriptionDestination.workoutItemNameIdArg])
+    val workOutDescriptionId: Int =
+        checkNotNull(savedStateHandle[WorkOutDetailsDescriptionDestination.workoutItemIdArg])
 
-    val workOutInfo: Flow<WorkOut> = getAllWorkOutByID(workOutId)
-
-    // TODO: you should probably use a different state here ... or just consolidate all states like its done in the now in android app. (highly suggest)
-    private val _state = MutableStateFlow(WorkOutDetailsViewState())
-    val state: StateFlow<WorkOutDetailsViewState> get() = _state
+    // TODO: you should probably use a different state here ... or just consolidate all states like its done in the now in android app. ()
+    private val _state = MutableStateFlow(WorkOutDetailsDescriptionViewState())
+    val state: StateFlow<WorkOutDetailsDescriptionViewState> get() = _state
 
     init {
-        _state.value = WorkOutDetailsViewState()
+        _state.value = WorkOutDetailsDescriptionViewState()
         subscribeToWorkOutDetails()
     }
 
     private fun subscribeToWorkOutDetails() {
-        _state.value = state.value.copy( loading = true)
+        _state.value = state.value.copy(loading = true)
         viewModelScope.launch {
-            getAllWorkOutByName(workOutNameId).collect {
+            getAllWorkOutByName(workOutName).collect { it ->
                 _state.value = state.value.copy(loading = false, workOuts = it)
             }
         }

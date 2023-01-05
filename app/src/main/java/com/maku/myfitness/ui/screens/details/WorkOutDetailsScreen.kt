@@ -1,10 +1,6 @@
 package com.maku.myfitness.ui.screens.details
 
 import android.content.res.TypedArray
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.ViewFlipper
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,34 +10,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
@@ -49,16 +40,16 @@ import com.maku.myfitness.core.util.allAssetsFiltered
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
 import com.maku.myfitness.ui.theme.MyFitnessTheme
-import kotlinx.coroutines.delay
 
 @Composable
 fun WorkOutDetailsScreen(
     onBackClick: () -> Unit = {},
-    id: Int?, // TODO: remove this, logic is already being handled in the view model
     appState: MyFitnessAppState,
     imgIndex: Int?,
+    onClick: (Int, String) -> Unit,
     homeDetailsViewModel: HomeDetailsViewModel = hiltViewModel()
 ) {
+    // TODO: find and remove repeatetion
     val systemUiController = rememberSystemUiController()
     SideEffect {
         // set transparent color so that our image is visible
@@ -74,8 +65,7 @@ fun WorkOutDetailsScreen(
         )
     )
     val workOutDetails by homeDetailsViewModel.state.collectAsState()
-    MenuItemScreen(onBackClick, workOutInfo, appState, imgIndex, workOutDetails)
-    // MenuItemScreen(onBackClick)
+    MenuItemScreen(onBackClick, workOutInfo, appState, imgIndex, workOutDetails, onClick)
 }
 
 @Composable
@@ -85,6 +75,7 @@ fun MenuItemScreen(
     appState: MyFitnessAppState,
     imgIndex: Int?,
     workOutDetails: WorkOutDetailsViewState,
+    onClick: (Int, String) -> Unit,
 ) {
     MenuItemScaffold(
         onBackClick = onBackClick,
@@ -92,6 +83,7 @@ fun MenuItemScreen(
         appState = appState,
         imgIndex = imgIndex,
         workOutDetails = workOutDetails,
+        onClick = onClick,
     )
 }
 
@@ -102,6 +94,7 @@ fun MenuItemScaffold(
     appState: MyFitnessAppState,
     imgIndex: Int?,
     workOutDetails: WorkOutDetailsViewState,
+    onClick: (Int, String) -> Unit,
 ) {
     // TODO: remove this warning
     val categoryImage: TypedArray = appState.resources.obtainTypedArray(R.array.category_image)
@@ -171,11 +164,11 @@ fun MenuItemScaffold(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(count = workOutDetails.workOuts.size) {
+            itemsIndexed(workOutDetails.workOuts) { index, item ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { }
+                        .clickable { onClick(index, workOutInfo.Name) }
                         .padding(8.dp, 0.dp, 8.dp, 0.dp),
                     elevation = 10.dp
                 ) {
@@ -186,13 +179,15 @@ fun MenuItemScaffold(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AsyncImage(
-                            model = allAssetsFiltered(workOutDetails.workOuts[it].Excrcise_Name,
-                                appState.assets)[0],
+                            model = allAssetsFiltered(
+                                workOutDetails.workOuts[index].Excrcise_Name,
+                                appState.assets
+                            )[0],
                             contentDescription = "Translated description of what the image contains",
                             modifier = Modifier.size(100.dp)
                         )
                         Text(
-                            text = workOutDetails.workOuts[it].Excrcise_Name,
+                            text = workOutDetails.workOuts[index].Excrcise_Name,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -218,7 +213,7 @@ fun MenuItemScaffoldPreview() {
             ),
             appState,
             1,
-            WorkOutDetailsViewState(
+            WorkOutDetailsViewState( // TODO: clean this by having it in previews util
                 false, listOf(
                     WorkOut(
                         1,
@@ -258,6 +253,7 @@ fun MenuItemScaffoldPreview() {
                     )
                 )
             ),
+            { _, _ -> {} },
         )
     }
 }
