@@ -1,5 +1,5 @@
 # MyFitness 
-https://user-images.githubusercontent.com/28810111/210286790-48a914d3-37ae-44a6-b170-9bf8e4143585.mp4
+https://user-images.githubusercontent.com/28810111/210895322-3029e55a-f43f-474f-886c-f70af7741ebe.mp4
 
 ### Status: 🚧 In progress 🚧
 A not so simple MVVM fitness app. Its completely offline, uses TypedArray to access and map the drawables to the data returned from the roomDB.
@@ -24,7 +24,11 @@ developer to contribute to it, youll be suprised what youll learn.
 1. category of workouts.
 2. Splash Screen.
 3. Modal Drawer.
-3. Nested Navigation graph.
+3. Deeply nested Navigation graph.
+4. Horizontal Pager
+
+## TODO
+1. Clear all TODOS.
 
 ## Built Using 🛠
 - [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android
