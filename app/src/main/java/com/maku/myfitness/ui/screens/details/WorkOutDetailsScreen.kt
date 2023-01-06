@@ -16,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +34,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
@@ -40,6 +43,8 @@ import com.maku.myfitness.core.util.allAssetsFiltered
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
 import com.maku.myfitness.ui.theme.MyFitnessTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.yield
 
 @Composable
 fun WorkOutDetailsScreen(
@@ -178,14 +183,37 @@ fun MenuItemScaffold(
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        AsyncImage(
-                            model = allAssetsFiltered(
+                        val detailPagerState = rememberPagerState()
+                        // TODO: replace this pager with a ViewFlipper AndroidView or similar library
+                        HorizontalPager(
+                            count = allAssetsFiltered(
                                 workOutDetails.workOuts[index].Excrcise_Name,
                                 appState.assets
-                            )[0],
-                            contentDescription = "Translated description of what the image contains",
-                            modifier = Modifier.size(100.dp)
-                        )
+                            ).size,
+                            modifier = Modifier
+                                .size(70.dp),
+                            state = detailPagerState,
+                            verticalAlignment = Alignment.Top
+                        ) { position ->
+                            AsyncImage(
+                                model = allAssetsFiltered(
+                                    workOutDetails.workOuts[index].Excrcise_Name,
+                                    appState.assets
+                                )[position],
+                                contentDescription = "Translated description of what the image contains",
+                                modifier = Modifier.size(70.dp)
+                            )
+                        }
+                        // please refer to this article for more info: https://levelup.gitconnected.com/create-an-auto-scroll-viewpager-with-transformation-and-ken-burns-effect-in-android-jetpack-compose-efdf46f2e8ed
+                        LaunchedEffect(Unit) {
+                            while(true) {
+                                yield()
+                                delay(1000)
+                                detailPagerState.animateScrollToPage(
+                                    page = (detailPagerState.currentPage + 1) % (detailPagerState.pageCount),
+                                )
+                            }
+                        }
                         Text(
                             text = workOutDetails.workOuts[index].Excrcise_Name,
                             style = MaterialTheme.typography.bodyLarge,

@@ -1,7 +1,6 @@
 package com.maku.myfitness.ui.screens.details.pager
 
 import android.util.Log
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,10 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
+import com.maku.myfitness.core.util.allAssetsFiltered
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
 import kotlinx.coroutines.delay
@@ -102,7 +102,8 @@ fun DetailsPagerScreen(
                 workOutDetails[position],
                 onBackClick,
                 position,
-                workOutDetails.size
+                workOutDetails.size,
+                appState
             )
         }
         LaunchedEffect(Unit) {
@@ -111,23 +112,18 @@ fun DetailsPagerScreen(
                 appState.pagerState.scrollToPage(id!!)
             }
         }
-
-        // please refer to this article for more info: https://levelup.gitconnected.com/create-an-auto-scroll-viewpager-with-transformation-and-ken-burns-effect-in-android-jetpack-compose-efdf46f2e8ed
-//        LaunchedEffect(Unit) {
-//            while(true) {
-//                yield()
-//                delay(2000)
-//                appState.pagerState.animateScrollToPage(
-//                    page = (appState.pagerState.currentPage + 1) % (appState.pagerState.pageCount),
-//                    animationSpec = tween(600)
-//                )
-//            }
-//        }
     }
 }
 
 @Composable
-fun PagerScreen(id: Int?, workOut: WorkOut, onBackClick: () -> Unit, position: Int, size: Int) {
+fun PagerScreen(
+    id: Int?,
+    workOut: WorkOut,
+    onBackClick: () -> Unit,
+    position: Int,
+    size: Int,
+    appState: MyFitnessAppState
+) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -160,19 +156,55 @@ fun PagerScreen(id: Int?, workOut: WorkOut, onBackClick: () -> Unit, position: I
 
         }
 
-        val image: Painter = painterResource(id = R.drawable.ic_launcher_web)
-        Image(
-            painter = image,
-            contentDescription = "",
+//        val image: Painter = painterResource(id = R.drawable.ic_launcher_web)
+//        Image(
+//            painter = image,
+//            contentDescription = "",
+//            modifier = Modifier
+//                .constrainAs(img_drw) {
+//                    top.linkTo(toolbar.bottom)
+//                    end.linkTo(toolbar.end)
+//                    start.linkTo(toolbar.start)
+//                    width = Dimension.fillToConstraints
+//                }
+//                .size(200.dp)
+//        )
+        val detailDescriptionPagerState = rememberPagerState()
+        HorizontalPager(
+            count = allAssetsFiltered(
+                workOut.Excrcise_Name,
+                appState.assets
+            ).size,
             modifier = Modifier
                 .constrainAs(img_drw) {
                     top.linkTo(toolbar.bottom)
                     end.linkTo(toolbar.end)
                     start.linkTo(toolbar.start)
-                    width = Dimension.fillToConstraints
+                    width = Dimension.wrapContent
                 }
-                .size(200.dp)
-        )
+                .size(200.dp),
+            state = detailDescriptionPagerState,
+            verticalAlignment = Alignment.Top
+        ) { position ->
+            AsyncImage(
+                model = allAssetsFiltered(
+                    workOut.Excrcise_Name,
+                    appState.assets
+                )[position],
+                contentDescription = "Translated description of what the image contains",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        // please refer to this article for more info: https://levelup.gitconnected.com/create-an-auto-scroll-viewpager-with-transformation-and-ken-burns-effect-in-android-jetpack-compose-efdf46f2e8ed
+        LaunchedEffect(Unit) {
+            while(true) {
+                yield()
+                delay(1000)
+                detailDescriptionPagerState.animateScrollToPage(
+                    page = (detailDescriptionPagerState.currentPage + 1) % (detailDescriptionPagerState.pageCount),
+                )
+            }
+        }
 
         Card(
             modifier = Modifier
