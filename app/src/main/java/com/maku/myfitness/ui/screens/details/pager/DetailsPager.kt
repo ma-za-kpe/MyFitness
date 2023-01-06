@@ -1,6 +1,7 @@
 package com.maku.myfitness.ui.screens.details.pager
 
 import android.util.Log
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,15 +34,19 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
 import com.maku.myfitness.ui.MyFitnessAppState
 import com.maku.myfitness.ui.rememberMyFitnessAppState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 @Composable
 fun DetailsPager(
     onBackClick: () -> Unit = {},
-    id: Int?, // TODO: remove this, logic is already being handled in the view model
+    id: Int?, // TODO: remove this, logic is already being handled in the view model, also, you could be pagerState in local scope
     appState: MyFitnessAppState,
     homeDetailsDescriptionViewModel: HomeDetailsDescriptionViewModel = hiltViewModel()
 ) {
@@ -99,6 +105,24 @@ fun DetailsPagerScreen(
                 workOutDetails.size
             )
         }
+        LaunchedEffect(Unit) {
+            // Later, scroll to page 2
+            appState.coroutineScope.launch {
+                appState.pagerState.scrollToPage(id!!)
+            }
+        }
+
+        // please refer to this article for more info: https://levelup.gitconnected.com/create-an-auto-scroll-viewpager-with-transformation-and-ken-burns-effect-in-android-jetpack-compose-efdf46f2e8ed
+//        LaunchedEffect(Unit) {
+//            while(true) {
+//                yield()
+//                delay(2000)
+//                appState.pagerState.animateScrollToPage(
+//                    page = (appState.pagerState.currentPage + 1) % (appState.pagerState.pageCount),
+//                    animationSpec = tween(600)
+//                )
+//            }
+//        }
     }
 }
 
@@ -109,7 +133,7 @@ fun PagerScreen(id: Int?, workOut: WorkOut, onBackClick: () -> Unit, position: I
             .fillMaxSize()
             .padding(15.dp)
     ) {
-        val (toolbar, img_drw, card, previous, next , btn) = createRefs()
+        val (toolbar, img_drw, card, previous, next, btn) = createRefs()
 
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -165,7 +189,7 @@ fun PagerScreen(id: Int?, workOut: WorkOut, onBackClick: () -> Unit, position: I
         ) {
             Column(
                 Modifier
-                .padding(16.dp)
+                    .padding(16.dp)
             ) {
                 Text(
                     text = workOut.Excrcise_Name,
@@ -194,7 +218,6 @@ fun PagerScreen(id: Int?, workOut: WorkOut, onBackClick: () -> Unit, position: I
             onClick = {
                 //your onclick code here
             }) {
-            // TODO: find a way to remember the selected item and display it first in the pager, an idea would be do slice the array from that selected index, but it has limitations
             Text(
                 text = "${position}/${size}",
                 color = Color.White,
