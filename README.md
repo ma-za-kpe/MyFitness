@@ -22,6 +22,7 @@ developer to contribute to it, youll be suprised what youll learn.
 4. Repository pattern
 5. DI
 6. State management
+7. Continous Intergration (Github Actions)
 
 ## Features
 1. category of workouts.
@@ -32,6 +33,7 @@ developer to contribute to it, youll be suprised what youll learn.
 
 ## TODO
 1. Clear all TODOS.
+2. Intergrate Jacoco in the CI(you can refer to this [link](https://www.kodeco.com/10562143-continuous-integration-for-android#toc-anchor-012))
 
 ## Built Using 🛠
 - [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android
