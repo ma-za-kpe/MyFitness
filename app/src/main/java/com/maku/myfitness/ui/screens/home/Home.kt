@@ -1,6 +1,8 @@
 package com.maku.myfitness.ui.screens.home
 
 import android.content.res.TypedArray
+import android.util.Log
+import android.widget.ImageView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.maku.myfitness.R
 import com.maku.myfitness.core.data.offline.model.WorkOut
@@ -119,7 +123,7 @@ fun CategoryItem(
     ) {
         val img = categoryImage.getResourceId(index, -1)
         val image: Painter =
-            painterResource(id = img) // TODO: this crushes the app at the 8 or 9th image scroll with error 2022-12-30 23:14:27.860 18249-18249 Error: stack=java.lang.IllegalArgumentException: Only VectorDrawables and rasterized asset types are supported ex. PNG, JPG
+            painterResource(id = img)
         Image(
             painter = image,
             contentDescription = "",
@@ -139,6 +143,31 @@ fun CategoryItem(
                 .fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
+
+//        // widget.ImageView
+//        AndroidView(
+//            factory = { ctx ->
+//                ImageView(ctx).apply {
+//                    val drawable = ContextCompat.getDrawable(ctx, img)
+//                    setImageDrawable(drawable)
+//                    scaleType = ImageView.ScaleType.FIT_CENTER
+//                }
+//            },
+//            modifier = Modifier
+//                .clickable { onClick(workout.ID, index, workout.Name) }
+//                .drawWithCache {
+//                    onDrawWithContent {
+//                        drawContent()
+//                        drawRect(
+//                            Brush.verticalGradient(
+//                                0.5f to Color.Black.copy(alpha = 0F),
+//                                2F to Color.Black
+//                            )
+//                        )
+//                    }
+//                }
+//                .fillMaxSize(),
+//        )
 
         Text(
             text = "${workout.Name}\nWORKOUT",
