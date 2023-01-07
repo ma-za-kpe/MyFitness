@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#This code removes verbose, debug and information log calls but leaves warnings and errors
+-assumenosideeffects class android.util.Log {
+ public static boolean isLoggable(java.lang.String, int);
+ public static int v(...);
+ public static int d(...);
+ public static int i(...);
+}

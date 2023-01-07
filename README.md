@@ -1,6 +1,9 @@
 # MyFitness 
 https://user-images.githubusercontent.com/28810111/210895322-3029e55a-f43f-474f-886c-f70af7741ebe.mp4
 
+# playstore 
+- https://play.google.com/store/apps/details?id=com.maku.myfitness
+
 ### Status: 🚧 In progress 🚧
 A not so simple MVVM fitness app. Its completely offline, uses TypedArray to access and map the drawables to the data returned from the roomDB.
 Experimenting with an offline first app.
