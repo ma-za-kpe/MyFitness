@@ -1,5 +1,6 @@
 # MyFitness 
-https://user-images.githubusercontent.com/28810111/210895322-3029e55a-f43f-474f-886c-f70af7741ebe.mp4
+https://user-images.githubusercontent.com/28810111/211173469-8bb5caf1-be99-4c1c-9730-e655731eb641.mp4
+
 
 # playstore 
 - https://play.google.com/store/apps/details?id=com.maku.myfitness
