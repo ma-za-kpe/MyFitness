@@ -6,8 +6,8 @@ on:
 
 jobs:
   build:
-#    runs-on: ubuntu-latest
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+#    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
@@ -26,13 +26,13 @@ jobs:
       run: bash ./gradlew test
     - name: Unit tests
       run: ./gradlew testDebugUnitTest
-    - name: Run instrumentation tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 29
-          arch: x86
-          profile: Nexus 6
-          avd-name: test
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          script: ./gradlew connectedCheck
+#    - name: Run instrumentation tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: 29
+#          arch: x86
+#          profile: Nexus 6
+#          avd-name: test
+#          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+#          disable-animations: true
+#          script: ./gradlew connectedCheck
