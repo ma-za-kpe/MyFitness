@@ -148,11 +148,6 @@ fun MenuItemScaffold(
                     onBackClick()
                 }
             ) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.ic_back),
-//                    contentDescription = stringResource(id = R.string.back)
-//                )
-
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Back",
